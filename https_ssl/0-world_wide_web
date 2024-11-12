@@ -2,8 +2,9 @@
 # Bash script to display information about subdomains
 
 dns_config () {
-    # Use dig to fetch DNS record, extract relevant information, and format the output
+    # Use dig to fetch DNS record and format the output
     record_info=$(dig "$2"."$1" +short)
+
     if [[ -n "$record_info" ]]; then
         echo "The subdomain $2 is a A record and points to $record_info"
     else
@@ -13,12 +14,15 @@ dns_config () {
 
 # Check number of arguments and call dns_config accordingly
 if [[ "$#" -eq 1 ]]; then
+    # List of default subdomains to query
     for sub in www lb-01 web-01 web-02; do
         dns_config "$1" "$sub"
     done
 elif [[ "$#" -eq 2 ]]; then
+    # Query the specified subdomain
     dns_config "$1" "$2"
 else
     echo "Usage: $0 domain [subdomain]"
     exit 1
 fi
+
